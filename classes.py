@@ -10,11 +10,12 @@ class Dot:
         self.color = (255, 0, 0)
         self.start_time = time.time()
     
-    def refresh(self, screen, mse_pos):
-        x = self.position[0] - mse_pos[0]
-        y = self.position[1] - mse_pos[1]
-        hyp = (x**2 + y**2) ** 0.5
-        distance_to_mse = hyp
-        if distance_to_mse < (self.circlewidth):
-            self.position = (random.randint(1, 1280), random.randint(1, 720))
+    def refresh(self, screen,mse_buttons, mse_buttons_previous_frame, mse_pos):
+        if mse_buttons[0] and not mse_buttons_previous_frame[0]:
+            x = self.position[0] - mse_pos[0]
+            y = self.position[1] - mse_pos[1]
+            hyp = (x**2 + y**2) ** 0.5
+            distance_to_mse = hyp
+            if distance_to_mse < (self.circlewidth):
+                self.position = (random.randint(1, 1280), random.randint(1, 720))
         pygame.draw.circle(screen, self.color, self.position, self.circlewidth)
