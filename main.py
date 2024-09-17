@@ -1,37 +1,35 @@
-# Example file showing a basic pygame "game loop"
 import pygame
 from classes import *
 
-# pygame setup
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 
 mse_buttons_previous_frame = (False, False, False)
+response_time = 0
 
-
+font = pygame.font.SysFont(None, 24)
+score = font.render("Response time: " + str(response_time), True, (255, 255, 255))
 circle1 = Dot()
 
 while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
     mse_buttons = pygame.mouse.get_pressed()
     mse_pos = pygame.mouse.get_pos()
 
-    # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
 
-    # RENDER YOUR GAME HERE
-    circle1.refresh(screen,mse_buttons, mse_buttons_previous_frame, mse_pos)
+    response_time = circle1.refresh(screen,mse_buttons, mse_buttons_previous_frame, mse_pos)
+    shrinked_response_time = str(response_time)[:4]
+    score = font.render("Response time: " + shrinked_response_time + " seconds", True, (255, 255, 255))
+    screen.blit(score, (4, 4))
 
-    # flip() the display to put your work on screen
+
     pygame.display.flip()
 
-    clock.tick(60)  # limits FPS to 60
+    clock.tick(60)
     mse_buttons_previous_frame = mse_buttons
-
 pygame.quit()
