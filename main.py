@@ -4,7 +4,7 @@ from classes import *
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 viewport = pygame.Surface((1280, 720))
-ui = pygame.Surface((1280, 720), pygame.SRCALPHA)
+ui = pygame.Surface((1280, 720), pygame.SRCALPHA) # UI supports transparency.
 clock = pygame.time.Clock()
 running = True
 

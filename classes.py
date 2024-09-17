@@ -41,6 +41,7 @@ class ResponseTimeLabel:
     def __init__(self):
         pass
     def refresh(self, ui, response_time):
+        response_time_str = "Response time: " + str(float(response_time))[:4] + " seconds"
         font = pygame.font.SysFont(None, 24)
-        text_surface = font.render("Response time: " + str(response_time) + " seconds", True, (255, 255, 255))
+        text_surface = font.render(response_time_str, True, (255, 255, 255))
         ui.blit(text_surface, (6, 6))
