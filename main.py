@@ -2,7 +2,10 @@ import pygame
 from classes import *
 
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
+ui_margine = 6 # Padding for UI elements.
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 viewport = pygame.Surface((1280, 720))
 ui = pygame.Surface((1280, 720), pygame.SRCALPHA) # UI supports transparency.
 clock = pygame.time.Clock()
@@ -13,11 +16,13 @@ mse_buttons = (False, False, False)
 mse_buttons_previous_frame = (False, False, False)
 
 # Viewport Classes:
-circle1 = Dot()
+circle1 = Dot(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 # UI classes:
-response_time_label = ResponseTimeLabel()
+response_time_label = ResponseTimeLabel(ui_margine)
 counter_label = CounterLabel()
+game_over_label = GameOverLabel()
+average_response_time_label = AverageResponseTimeLabel()
 
 while running:
     for event in pygame.event.get():
@@ -36,8 +41,13 @@ while running:
 
     # RENDERING THE UI:
     ui.fill((0, 0, 0, 0))
-    response_time_label.refresh(ui, circle1.response_time)
-    counter_label.refresh(ui, circle1.counter)
+    if not circle1.game_over:
+        response_time_label.refresh(ui, circle1.response_time)
+        counter_label.refresh(ui, SCREEN_WIDTH, ui_margine, circle1.counter)
+    else:
+        game_over_label.refresh(ui, SCREEN_WIDTH)
+        average_response_time = circle1.calculate_avg_response_time()
+        average_response_time_label.refresh(ui, SCREEN_WIDTH, average_response_time)
 
     screen.blit(viewport, (0, 0))
     screen.blit(ui, (0, 0))
