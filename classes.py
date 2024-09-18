@@ -20,6 +20,7 @@ class Dot:
         self.response_time_list = [] # To store response times to calculate the average.
 
         self.counter = 5
+        self.game_started = False
         self.game_over = False
     
     # Refresh the mouse position when clicked. Returns the response time.
@@ -32,12 +33,14 @@ class Dot:
                 hyp = (x**2 + y**2) ** 0.5
                 distance_to_mse = hyp
                 if distance_to_mse < (self.circlewidth):
-                    self.response_time = time.time() - self.start_time
-                    self.response_time_list.append(self.response_time)
+                    if self.game_started:
+                        self.response_time = time.time() - self.start_time
+                        self.response_time_list.append(self.response_time)
                     self.start_time = time.time()
                     self.position = (random.randint(self.pos_x_min, self.pos_x_max),
                                     random.randint(self.pos_y_min, self.pos_y_max))
                     self.counter -= 1
+                    self.game_started = True
             pygame.draw.circle(screen, self.color, self.position, self.circlewidth)
         else:
             self.game_over = True
