@@ -7,16 +7,17 @@ viewport = pygame.Surface((1280, 720))
 ui = pygame.Surface((1280, 720), pygame.SRCALPHA) # UI supports transparency.
 clock = pygame.time.Clock()
 running = True
+game_over = False
 
 mse_buttons = (False, False, False)
 mse_buttons_previous_frame = (False, False, False)
-response_time = 0
 
 # Viewport Classes:
 circle1 = Dot()
 
 # UI classes:
 response_time_label = ResponseTimeLabel()
+counter_label = CounterLabel()
 
 while running:
     for event in pygame.event.get():
@@ -30,11 +31,13 @@ while running:
 
     # RENDERING THE VIEWPORT:
     viewport.fill((0, 0, 0))
-    response_time = circle1.refresh(viewport, mse_buttons, mse_buttons_previous_frame, mse_pos)
+    if not circle1.game_over:
+        circle1.refresh(viewport, mse_buttons, mse_buttons_previous_frame, mse_pos)
 
     # RENDERING THE UI:
     ui.fill((0, 0, 0, 0))
-    response_time_label.refresh(ui, response_time)
+    response_time_label.refresh(ui, circle1.response_time)
+    counter_label.refresh(ui, circle1.counter)
 
     screen.blit(viewport, (0, 0))
     screen.blit(ui, (0, 0))
