@@ -94,3 +94,23 @@ class AverageResponseTimeLabel:
         text_surface = font.render(text, True, (255, 255, 255))
         text_x_pos = (screen_width / 2) - (text_width / 2)
         ui.blit(text_surface, (text_x_pos, 380))
+
+class Label: # align can be "center", "left" and "right".
+    def __init__(self, ypos, text, SCREEN_WIDTH, SCREEN_HEIGHT, font_size=24, align="left", padding=6) -> None:
+        self.text = text
+        self.SCREEN_WIDTH = SCREEN_WIDTH
+        self.SCREEN_HEIGHT = SCREEN_HEIGHT
+        self.font_size = font_size
+        self.align = align
+        self.padding = padding
+        self.font = pygame.font.SysFont(None, self.font_size)
+        self.size = self.font.size(self.text)
+        self.pos = [padding, ypos] # Default align left.
+        if self.align == "right":
+            self.pos[0] = self.SCREEN_WIDTH - self.padding - self.size[0]
+        elif self.align == "center":
+            self.pos[0] = (self.SCREEN_WIDTH / 2) - (self.size[0] / 2)
+        self.text_surface = self.font.render(self.text, True, (255, 255, 255))
+
+    def render(self, surface):
+        surface.blit(self.text_surface, self.pos)
