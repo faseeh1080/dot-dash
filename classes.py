@@ -19,13 +19,13 @@ class Dot:
         self.response_time = 0
         self.response_time_list = [] # To store response times to calculate the average.
 
-        self.counter = 5
+        self.remaining = 5
         self.game_started = False
         self.game_over = False
     
     # Refresh the mouse position when clicked. Returns the response time.
     def refresh(self, screen,mse_buttons, mse_buttons_previous_frame, mse_pos):
-        if self.counter > 0:
+        if self.remaining > 0:
             self.game_over = False
             if mse_buttons[0] and not mse_buttons_previous_frame[0]:
                 x = self.position[0] - mse_pos[0]
@@ -39,7 +39,7 @@ class Dot:
                     self.start_time = time.time()
                     self.position = (random.randint(self.pos_x_min, self.pos_x_max),
                                     random.randint(self.pos_y_min, self.pos_y_max))
-                    self.counter -= 1
+                    self.remaining -= 1
                     self.game_started = True
             pygame.draw.circle(screen, self.color, self.position, self.circlewidth)
         else:
@@ -52,51 +52,9 @@ class Dot:
         else: average_response_time = None
 
         return average_response_time
-    
-class ResponseTimeLabel:
-    def __init__(self, padding):
-        self.pos = (padding, padding)
-    def refresh(self, ui, response_time):
-        response_time_str = "Response time: " + str(float(response_time))[:4] + " seconds"
-        font = pygame.font.SysFont(None, 24)
-        text_surface = font.render(response_time_str, True, (255, 255, 255))
-        ui.blit(text_surface, self.pos)
-
-class CounterLabel:
-    def __init__(self):
-        pass
-    def refresh(self, ui, screen_width, padding, counter):
-        font = pygame.font.SysFont(None, 36)
-        text = str(counter)
-        text_surface = font.render(str(counter), True, (255, 255, 255))
-        text_width = font.size(text)[0]
-        position = (screen_width - text_width - padding, padding)
-        ui.blit(text_surface, (position))
-
-class GameOverLabel:
-    def __init__(self) -> None:
-        pass
-    def refresh(self, ui, screen_width):
-        font = pygame.font.SysFont(None, 56)
-        text = "Good Job!"
-        text_width = font.size(text)[0]
-        text_surface = font.render(text, True, (255, 255, 255))
-        text_x_pos = (screen_width / 2) - (text_width / 2)
-        ui.blit(text_surface, (text_x_pos, 300))
-
-class AverageResponseTimeLabel:
-    def __init__(self) -> None:
-        pass
-    def refresh(self, ui, screen_width, average_response_time):
-        font = pygame.font.SysFont(None, 36)
-        text = "Average response time: " + str(average_response_time)[:4]
-        text_width = font.size(text)[0]
-        text_surface = font.render(text, True, (255, 255, 255))
-        text_x_pos = (screen_width / 2) - (text_width / 2)
-        ui.blit(text_surface, (text_x_pos, 380))
 
 class Label: # align can be "center", "left" and "right".
-    def __init__(self, ypos, text, SCREEN_WIDTH, SCREEN_HEIGHT, font_size=24, align="left", padding=6) -> None:
+    def __init__(self, ypos, text, SCREEN_WIDTH, SCREEN_HEIGHT, font_size=24, align="left", padding=6, color=(255, 255, 255)) -> None:
         self.text = text
         self.SCREEN_WIDTH = SCREEN_WIDTH
         self.SCREEN_HEIGHT = SCREEN_HEIGHT
@@ -105,12 +63,27 @@ class Label: # align can be "center", "left" and "right".
         self.padding = padding
         self.font = pygame.font.SysFont(None, self.font_size)
         self.size = self.font.size(self.text)
+        self.color = color
         self.pos = [padding, ypos] # Default align left.
         if self.align == "right":
             self.pos[0] = self.SCREEN_WIDTH - self.padding - self.size[0]
         elif self.align == "center":
             self.pos[0] = (self.SCREEN_WIDTH / 2) - (self.size[0] / 2)
-        self.text_surface = self.font.render(self.text, True, (255, 255, 255))
+        self.text_surface = self.font.render(self.text, True, self.color)
 
     def render(self, surface):
         surface.blit(self.text_surface, self.pos)
+
+    def calculate_positions(self):
+        self.pos[0] = self.padding # Default align left.
+        if self.align == "right":
+            self.pos[0] = self.SCREEN_WIDTH - self.padding - self.size[0]
+        elif self.align == "center":
+            self.pos[0] = (self.SCREEN_WIDTH / 2) - (self.size[0] / 2)
+
+    def change_text(self, new_text: str):
+        self.text = new_text
+        self.size = self.font.size(self.text)
+        self.calculate_positions()
+        self.text_surface = self.font.render(self.text, True, self.color)
+        

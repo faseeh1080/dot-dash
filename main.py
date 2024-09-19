@@ -19,10 +19,11 @@ mse_buttons_previous_frame = (False, False, False)
 circle1 = Dot(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 # UI classes:
-response_time_label = ResponseTimeLabel(ui_margine)
-counter_label = CounterLabel()
-game_over_label = GameOverLabel()
-average_response_time_label = AverageResponseTimeLabel()
+padding = 10
+response_time_label = Label(8, "Response time: ", SCREEN_WIDTH, SCREEN_HEIGHT, font_size=24, padding=padding)
+counter_label = Label(8, "", SCREEN_WIDTH, SCREEN_HEIGHT, font_size=64, align="right", padding=padding)
+game_over_label = Label(8, "Good Job!", SCREEN_WIDTH, SCREEN_HEIGHT, font_size=24, align="center", padding=padding)
+average_response_time_label = Label(50, "", SCREEN_WIDTH, SCREEN_HEIGHT, font_size=24, align="center", padding=padding)
 
 while running:
     for event in pygame.event.get():
@@ -42,12 +43,16 @@ while running:
     # RENDERING THE UI:
     ui.fill((0, 0, 0, 0))
     if not circle1.game_over:
-        response_time_label.refresh(ui, circle1.response_time)
-        counter_label.refresh(ui, SCREEN_WIDTH, ui_margine, circle1.counter)
+        response_time_text = "Response Time: " + str(circle1.response_time)[:4]
+        response_time_label.change_text("Response Time: " + response_time_text)
+        response_time_label.render(ui)
+        counter_label.change_text(str(circle1.remaining))
+        counter_label.render(ui)
     else:
-        game_over_label.refresh(ui, SCREEN_WIDTH)
+        game_over_label.render(ui)
         average_response_time = circle1.calculate_avg_response_time()
-        average_response_time_label.refresh(ui, SCREEN_WIDTH, average_response_time)
+        average_response_time_label.change_text("Average Response Time: " + str(average_response_time)[:4])
+        average_response_time_label.render(ui)
 
     screen.blit(viewport, (0, 0))
     screen.blit(ui, (0, 0))
