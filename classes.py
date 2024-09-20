@@ -4,7 +4,7 @@ import time
 
 # This Dot class gets randomly placed.
 class Dot:
-    def __init__(self, screen_width, screen_height):
+    def __init__(self, screen_width, screen_height, total_number: int):
         self.circlewidth = 26
         self.color = (255, 0, 0)
 
@@ -19,7 +19,8 @@ class Dot:
         self.response_time = 0
         self.response_time_list = [] # To store response times to calculate the average.
 
-        self.remaining = 5
+        self.total_number = total_number
+        self.remaining = self.total_number
         self.game_started = False
         self.game_over = False
     
@@ -33,7 +34,7 @@ class Dot:
                 hyp = (x**2 + y**2) ** 0.5
                 distance_to_mse = hyp
                 if distance_to_mse < (self.circlewidth):
-                    if not self.game_over:
+                    if not self.game_over and  not (self.remaining == self.total_number): # To not calculate the reponse time for initial click.
                         self.response_time = time.time() - self.start_time
                         self.response_time_list.append(self.response_time)
                     self.start_time = time.time()
@@ -51,6 +52,12 @@ class Dot:
         else: average_response_time = None
 
         return average_response_time
+    
+    def restart(self):
+        self.remaining = self.total_number
+        self.response_time = 0
+        self.response_time_list = []
+        self.game_over = False
 
 class Label: # align can be "center", "left" and "right".
     def __init__(self, ypos, text, SCREEN_WIDTH, SCREEN_HEIGHT, font_size=24, align="left", padding=6, color=(255, 255, 255)) -> None:
