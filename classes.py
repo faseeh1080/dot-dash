@@ -17,7 +17,7 @@ class Dot:
 
         self.start_time = time.time() # To calculate response time.
         self.response_time = 0
-        self.response_time_list = [] # To store response times to calculate the average.
+        self.response_time_list = [] # To calculate the average.
 
         self.total_number = total_number
         self.remaining = self.total_number
@@ -34,7 +34,8 @@ class Dot:
                 hyp = (x**2 + y**2) ** 0.5
                 distance_to_mse = hyp
                 if distance_to_mse < (self.circlewidth):
-                    if not self.game_over and  not (self.remaining == self.total_number): # To not calculate the reponse time for initial click.
+                    #  To not calculate the reponse time for initial click. \/
+                    if not self.game_over and  not (self.remaining == self.total_number):
                         self.response_time = time.time() - self.start_time
                         self.response_time_list.append(self.response_time)
                     self.start_time = time.time()
@@ -60,7 +61,9 @@ class Dot:
         self.game_over = False
 
 class Label: # align can be "center", "left" and "right".
-    def __init__(self, ypos, text, SCREEN_WIDTH, SCREEN_HEIGHT, font_size=24, align="left", margin=6, color=(255, 255, 255)) -> None:
+    def __init__(self, ypos, text, SCREEN_WIDTH, SCREEN_HEIGHT,
+                 font_size=24, align="left", margin=6,
+                 color=(255, 255, 255)) -> None:
         self.text = text
         self.SCREEN_WIDTH = SCREEN_WIDTH
         self.SCREEN_HEIGHT = SCREEN_HEIGHT
@@ -90,4 +93,61 @@ class Label: # align can be "center", "left" and "right".
         self.calculate_positions()
         self.text_surface = self.font.render(self.text, True, self.color)
         
- 
+class Button:
+    def __init__(self, ypos, text, SCREEN_WIDTH, SCREEN_HEIGHT,
+                 font_size=24, align="left", padding=4, margin=6,
+                 color=(255, 255, 255), bg_color=(0,0,100)) -> None:
+        self.text = text
+        self.SCREEN_WIDTH = SCREEN_WIDTH
+        self.SCREEN_HEIGHT = SCREEN_HEIGHT
+        self.font_size = font_size
+        self.align = align
+        self.padding = padding
+        self.margin = margin
+        self.color = color
+        self.bg_color = bg_color
+        self.surface = None
+        self.text_surface = None
+        self.font = pygame.font.SysFont(None, self.font_size)
+        self.text_size = None
+        self.create_surface()
+        self.pos = [0, ypos]
+        self.calculate_pos()
+        self.clicked = False
+
+    # Draws the button to self.surface.
+    def create_surface(self):
+        self.text_size = self.font.size(self.text) # Size of the text surface.
+        self.surface_size = (self.text_size[0] + self.padding,
+                             self.text_size[1] + self.padding)
+        self.surface = pygame.Surface((self.surface_size), pygame.SRCALPHA)
+        self.surface.fill(self.bg_color)
+        self.text_surface = self.font.render(self.text, True, self.color)
+        self.surface.blit(self.text_surface, (self.padding, self.padding))
+
+    def calculate_pos(self):
+        self.pos[0] = self.padding + self.margin # Default pos left.
+        if self.align == "right":
+            self.pos[0] = self.SCREEN_WIDTH - self.padding - self.margin - self.text_size[0]
+        elif self.align == "center":
+            self.pos[0] = (
+                (self.SCREEN_WIDTH / 2) - (self.padding / 2) - 
+                (self.margin / 2) - (self.text_size[0] / 2)
+            )
+
+    def render(self, surface):
+        surface.blit(self.surface, self.pos)
+
+    def is_clicked(self, mse_buttons, mse_buttons_previous_frame, mse_pos):
+        if (
+            (mse_buttons[0] and not mse_buttons_previous_frame[0]) and
+            mse_pos[0] > self.pos[0] and
+            mse_pos[1] > self.pos[1] and
+            mse_pos[0] < self.pos[0] + self.surface.get_width() and
+            mse_pos[1] < self.pos[1] + self.surface.get_height()
+        ):
+            self.clicked = True
+        else:
+            self.clicked = False
+            
+            
