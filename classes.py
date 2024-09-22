@@ -118,8 +118,8 @@ class Button:
     # Draws the button to self.surface.
     def create_surface(self):
         self.text_size = self.font.size(self.text) # Size of the text surface.
-        self.surface_size = (self.text_size[0] + self.padding,
-                             self.text_size[1] + self.padding)
+        self.surface_size = (self.text_size[0] + self.padding * 2,
+                             self.text_size[1] + self.padding * 2)
         self.surface = pygame.Surface((self.surface_size), pygame.SRCALPHA)
         self.surface.fill(self.bg_color)
         self.text_surface = self.font.render(self.text, True, self.color)
