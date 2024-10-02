@@ -173,3 +173,8 @@ class Notification:
                     surface_height - 26)
         surface.blit(self.text_surface, position)
         
+    def change_text(self, new_text):
+        self.text = new_text
+        self.text_surface = self.font.render(self.text, True, self.text_color)
+        self.text_surface_width = self.text_surface.get_width()
+        self.start_time = time.time()

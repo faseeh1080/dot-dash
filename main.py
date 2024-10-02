@@ -67,7 +67,7 @@ while running:
         if restart_btn.clicked:
             dot.restart()
 
-    notification.render(ui)    
+    notification.render(ui)
 
     screen.blit(viewport, (0, 0))
     screen.blit(ui, (0, 0))
