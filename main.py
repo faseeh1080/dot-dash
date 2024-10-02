@@ -17,7 +17,6 @@ mse_buttons_previous_frame = (False, False, False)
 
 # Viewport Classes:
 dot = Dot(SCREEN_WIDTH, SCREEN_HEIGHT, 5)
-restart_btn = Button(380, "Restart", SCREEN_WIDTH, SCREEN_HEIGHT, align="center", bg_color=(115, 197, 255), color=(0, 0, 0), font_size=24, padding=18)
 
 # UI classes:
 ui_margine = 10
@@ -27,6 +26,7 @@ counter_label = Label(8, "", SCREEN_WIDTH, SCREEN_HEIGHT, font_size=64, align="r
 game_over_label = Label(280, "Good Job!", SCREEN_WIDTH, SCREEN_HEIGHT, font_size=50, align="center", margin=ui_margine)
 average_response_time_label = Label(320, "", SCREEN_WIDTH, SCREEN_HEIGHT, font_size=24, align="center", margin=ui_margine)
 restart_label = Label(345, "Press spacebar or the button to restart", SCREEN_WIDTH, SCREEN_HEIGHT, 28, align="center", margin=ui_margine)
+restart_btn = Button(380, "Restart", SCREEN_WIDTH, SCREEN_HEIGHT, align="center", bg_color=(115, 197, 255), color=(0, 0, 0), font_size=24, padding=18)
 
 while running:
     for event in pygame.event.get():
@@ -60,7 +60,7 @@ while running:
         average_response_time_label.change_text("Average Response Time: " + str(average_response_time)[:4])
         average_response_time_label.render(ui)
         restart_label.render(ui)
-        restart_btn.render(viewport)
+        restart_btn.render(ui)
         restart_btn.is_clicked(mse_buttons, mse_buttons_previous_frame, mse_pos)
         if restart_btn.clicked:
             dot.restart()
