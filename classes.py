@@ -4,7 +4,7 @@ import time
 
 # This Dot class gets randomly placed.
 class Dot:
-    def __init__(self, screen_width, screen_height, total_number: int):
+    def __init__(self, screen_width, screen_height, total_number: int) -> None:
         self.circlewidth = 26
         self.color = (255, 0, 0)
 
@@ -150,4 +150,26 @@ class Button:
         else:
             self.clicked = False
             
-            
+class Notification:
+    def __init__(self, text="Notification", text_size=12) -> None:
+        self.text = text
+        self.text_size = text_size
+        font_size = 20
+        self.font = pygame.font.SysFont(None, font_size)
+        self.text_color = (255, 255, 255)
+        self.text_surface = self.font.render(self.text, True, self.text_color)
+        self.text_surface_width = self.text_surface.get_width()
+
+        self.start_time = time.time()
+        self.time_to_hold = 3.0
+
+    def render(self, surface):
+        elapsed_time = time.time() - self.start_time
+        if elapsed_time > self.time_to_hold:
+            return
+        surface_width = surface.get_width()
+        surface_height = surface.get_height()
+        position = ((surface_width / 2) - (self.text_surface_width / 2),
+                    surface_height - 26)
+        surface.blit(self.text_surface, position)
+        
