@@ -17,7 +17,7 @@ mse_buttons_previous_frame = (False, False, False)
 
 # Viewport Classes:
 dot = Dot(SCREEN_WIDTH, SCREEN_HEIGHT, 5)
-restart_btn = Button(400, "Restart", SCREEN_WIDTH, SCREEN_HEIGHT, align="center", bg_color=(115, 197, 255), color=(0, 0, 0), font_size=24, padding=18)
+restart_btn = Button(380, "Restart", SCREEN_WIDTH, SCREEN_HEIGHT, align="center", bg_color=(115, 197, 255), color=(0, 0, 0), font_size=24, padding=18)
 
 # UI classes:
 ui_margine = 10
