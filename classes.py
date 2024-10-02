@@ -21,10 +21,12 @@ class Dot:
 
         self.total_number = total_number
         self.remaining = self.total_number
-        self.game_started = False
         self.game_over = False
     
-    # Refresh the mouse position when clicked. Returns the response time.
+    # This method should be called each frame. It changes the dot's
+    # position when the user clicks the dot, adds the response time
+    # to the response_time_list if the user has clicked the dot,
+    # handles the game_over variable, and draws the dot.
     def refresh(self, screen,mse_buttons, mse_buttons_previous_frame, mse_pos):
         if self.remaining > 0:
             self.game_over = False
@@ -34,7 +36,7 @@ class Dot:
                 hyp = (x**2 + y**2) ** 0.5
                 distance_to_mse = hyp
                 if distance_to_mse < (self.circlewidth):
-                    #  To not calculate the reponse time for initial click. \/
+                    #  To not calculate the reponse time for the initial click. \/
                     if not self.game_over and  not (self.remaining == self.total_number):
                         self.response_time = time.time() - self.start_time
                         self.response_time_list.append(self.response_time)
